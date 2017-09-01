@@ -139,7 +139,7 @@ Below you can find some images with classified cars. As mentioned above, for cla
 
 #### 1. Provide a link to your final video output. Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.) 
 
-The output video is stored in the file: output_video.mp4
+The output video is stored in the file: [output_video.mp4](https://github.com/nmitsou/CarND-Vehicle-Detection/blob/master/output_video.mp4)
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
