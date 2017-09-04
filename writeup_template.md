@@ -139,11 +139,11 @@ Below you can find some images with classified cars. As mentioned above, for cla
 
 #### 1. Provide a link to your final video output. Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.) 
 
-The output video is stored in the file: output_video.mp4
+The output video is stored in the file: [output_video.mp4](https://github.com/nmitsou/CarND-Vehicle-Detection/blob/master/output_video.mp4)
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video. From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions. I then used scipy.ndimage.measurements.label() to identify individual blobs in the heatmap. I then assumed each blob corresponded to a vehicle. I constructed bounding boxes to cover the area of each blob detected.
+I recorded the positions of positive detections in each frame of the video. From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions. I then used scipy.ndimage.measurements.label() to identify individual blobs in the heatmap. Finally, I assumed that each blob corresponded to a vehicle and constructed bounding boxes to cover the area of each blob detected.
 
 Here's an example result showing the heatmaps for the three images shown above:
 
@@ -201,17 +201,19 @@ Finally, below you can find the above images with a bounding box around every ca
 
 ![png](output_images/output_17_2.png)
 
+In order to get more stable bounding boxes, I implemented a multi-frame accumulated filter: I stored the heatmaps of the last 5 frames and used the accumulated heatmap 
+for labeling.
 
 ### Discussion
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project. Where will your pipeline likely fail? What could you do to make it more robust?
 
-One issue I faced in this project was the existence of false possitives in classification either on the left side of the street or on the areas that are covered by trees.
+One issue I faced in this project was the existence of false possitives in classification either on the left and center side of the street or on the areas that are covered by trees.
 My initial attempt to filter the heatmap based on the heat was not successfull since I was also filtering out true positives. 
-Thus, I decided to increase the number of sliding windows patterns which eventually solved the problem. 
+Thus, I decided to increase the number of sliding windows patterns which eventually removed most of the false positives.
+In order to improve further, I added an accumulated heatmap that considers the last 5 frames to detect the car positions. In this way, the last false positives were eliminated and the bounding boxes around the cars became much more stable (in size).
 
-
-What I would like to add in the current pipeline is a kalman filter on the positions (and maybe speed) of the cars. In this way, the positions of the bounding boxes of the cars will be more stable and when we observe overlapping bounding boxes, the overlaping bounding boxes will not be considered as one car but as two (or more) cars. 
+What I would like to add in the current pipeline is a kalman filter on the positions (and maybe speed) of the cars. In this way, when we observe overlapping bounding boxes, they will not be merged as one car but rather stay independed.
 
 
 ```python
